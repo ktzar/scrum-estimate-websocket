@@ -32,7 +32,7 @@ var Estimate = function(user_options) {
     this.socket = io.connect('/');
     this.socket.on('connect', function(){});
     this.socket.on('disconnect', function(){
-        alert("Connection closed");
+        console.log("Connection closed");
     });
 
     //message sending function

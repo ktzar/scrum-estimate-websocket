@@ -1,4 +1,36 @@
 @import url("font-awesome.css");
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, del, dfn, em, img, ins, kbd, q, samp, small, strong, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, table, tbody, tfoot, thead, tr, th, td, article, aside, footer, header, nav, section {
+  margin:0;
+  padding:0;
+  border:0;
+  outline:0;
+  font-size:100%;
+  vertical-align:baseline;
+  background:transparent;
+}
+body {
+  -webkit-text-size-adjust:none;
+  font-family:sans-serif;
+}
+small {
+  margin:0 10px 30px;
+  display:block;
+  font-size:12px;
+}
+.swipe {
+  padding-bottom:20px;
+}
+.swipe li div, .swipe div div div {
+  margin:0 10px;
+  padding:50px 10px;
+  background:#1db1ff;
+  font-weight:bold;
+  color:#fff;
+  font-size:20px;
+  text-align:center;
+}
+
+
 body{
     font-family: Arial, sans;
     background: #7B7F63;
@@ -29,6 +61,15 @@ h1,h2{
     } 
 }
 
+#values li{
+    text-align: center;
+    font-size: 72px;
+}
 #values li.active{
     font-weight: bold;
+}
+
+.controls{
+    font-size: 26px;
+    text-align: center;
 }

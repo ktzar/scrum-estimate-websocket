@@ -35,14 +35,16 @@ function updateList(contacts) {
     var contact;
     var total = 0;
     var sum = 0;
+    $('#list').html('');
     for (_c in contacts) {
         contact = contacts[_c];
         if (contact.points > 0) {
             sum += contact.points;
             total ++;
+            $('#list').html($('#list').html() + "<br/>"+contact.name+": "+contact.points);
         }
     }
-    var average = sum/total;
+    var average = parseInt(100*sum/total)/100;
 
     $('#value').html(average);
 }
@@ -55,6 +57,10 @@ function init() {
 $(function(){
     //ask for a name
     var name = null, i = 0;
+    $('#toggle_list').click(function(){
+        $('#list').slideToggle();
+    });
+    $('#list').hide();
     init();
 
 });
