@@ -42,7 +42,7 @@ function updateList(contacts) {
         if (contact.points > 0) {
             sum += contact.points;
             total ++;
-            $('#list').html($('#list').html() + "<br/>"+contact.name+": "+contact.points);
+            $('#list').html($('#list').html() + "<li>"+contact.name+": "+contact.points+"</li>");
         }
     }
 
