@@ -54,7 +54,7 @@ h1,h2{
 }
 #values li{
     text-align: center;
-    font-size: 200px;
+    font-size: 1500%;
 }
 #values li.active{
     font-weight: bold;
