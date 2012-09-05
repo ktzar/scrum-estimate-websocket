@@ -1,3 +1,27 @@
+function setCookie(c_name,value,exdays)
+{
+    var exdate=new Date();
+    exdate.setDate(exdate.getDate() + exdays);
+    var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+    document.cookie=c_name + "=" + c_value;
+}
+
+
+function getCookie(c_name)
+{
+    var i,x,y,ARRcookies=document.cookie.split(";");
+    for (i=0;i<ARRcookies.length;i++)
+    {
+        x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+        y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+        x=x.replace(/^\s+|\s+$/g,"");
+        if (x==c_name)
+        {
+            return unescape(y);
+        }
+    }
+}
+
 //Chat Class
 var Estimate = function(user_options) {
 
@@ -9,11 +33,11 @@ var Estimate = function(user_options) {
 
     //check for HTML5 Storage
     this.hasLocalStorage = function supports_html5_storage() {
-      try {
-        return 'localStorage' in window && window['localStorage'] !== null;
-      } catch (e) {
-        return false;
-      }
+        try {
+            return 'localStorage' in window && window['localStorage'] !== null;
+        } catch (e) {
+            return false;
+        }
     }();
 
     //default options
@@ -88,17 +112,22 @@ var estimate;
 function init() {
     //instantiate conn class
     estimate = new Estimate({
-         _cb_nickchange: nickChange,
-         _cb_list: function(data){console.log('list', data);},
+        _cb_nickchange: nickChange,
+             _cb_list: function(data){console.log('list', data);},
     });
 }
 //onLoad
 $(function(){
     //ask for a name
-    var name = null, i = 0;
     init();
 
-    nickChange(prompt("Your name"));
+    var name = getCookie('estimate_name');
+    if (name == null) {
+        name = prompt("Can I have your name please?");
+        setCookie('estimate_name', name, 365);
+    }
+    nickChange(name);
+
 
     $('#values li').click(function(){
         $('#values li').removeClass('selected');
