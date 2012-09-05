@@ -35,6 +35,7 @@ function updateList(contacts) {
     var contact;
     var total = 0;
     var sum = 0;
+    var average = 0;
     $('#list').html('');
     for (_c in contacts) {
         contact = contacts[_c];
@@ -44,8 +45,12 @@ function updateList(contacts) {
             $('#list').html($('#list').html() + "<br/>"+contact.name+": "+contact.points);
         }
     }
-    var average = parseInt(100*sum/total)/100;
 
+    if (total > 0) {
+        average = parseInt(100*sum/total)/100;
+    }else{
+        average = "No votes";
+    }
     $('#value').html(average);
 }
 

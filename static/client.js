@@ -74,6 +74,7 @@ var Estimate = function(user_options) {
 
 function nickChange (nick) {
     console.log('nickChange ',nick);
+    estimate.setNick(nick);
 }
 
 //Send the points
@@ -96,6 +97,8 @@ $(function(){
     //ask for a name
     var name = null, i = 0;
     init();
+
+    nickChange(prompt("Your name"));
 
     $('#values li').click(function(){
         $('#values li').removeClass('selected');

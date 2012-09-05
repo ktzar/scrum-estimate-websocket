@@ -67,14 +67,20 @@ var createChat = function(room_name){
         var _this = this;
 
         var nick = "Anonymous_"+user_count++;
-        socket.set('nick', nick);
-        contacts[socket.id] = {'nick':nick};
-
-        //Set nickname to the user
-        socket.emit('nick', nick);
 
         contacts[socket.id] = {name:nick,points:0};
         refreshContactList();
+
+        //Message to the Room
+        socket.on('nick', function (message) {
+            if (message == undefined || message.length == 0 ) {
+                console.log('Empty message');
+                return;
+            }
+            contacts[socket.id]['name'] = message;
+            console.log("Nick set to ", message);
+            refreshContactList();
+        });
 
         //Message to the Room
         socket.on('points', function (message) {
