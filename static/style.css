@@ -42,6 +42,9 @@ h1,h2{
     padding:0.25em;
     margin:0px;
 }
+h1 a, h2 a{
+	color: white;
+}
 #wrapper{
     background: white;
     height: 100%;
