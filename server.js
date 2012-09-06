@@ -58,7 +58,6 @@ var createChat = function(room_name){
     io.on('connection', function (socket) {
 
         var refreshContactList = function () {
-            console.log(contacts);
             io.sockets.emit('list', contacts);
         };
 
@@ -74,24 +73,20 @@ var createChat = function(room_name){
         //Message to the Room
         socket.on('nick', function (message) {
             if (message == undefined || message.length == 0 ) {
-                console.log('Empty message');
                 return;
             }
             contacts[socket.id]['name'] = message;
-            console.log("Nick set to ", message);
             refreshContactList();
         });
 
         //Message to the Room
         socket.on('points', function (message) {
             if (message == undefined || message.length == 0 ) {
-                console.log('Empty message');
                 return;
             }
             contacts[socket.id]['points'] = parseFloat(message);
             //Get the nickname
             var nick = contacts[socket.id]['nick'];
-            console.log("Send ",nick, message);
             refreshContactList();
         });
 
@@ -100,7 +95,6 @@ var createChat = function(room_name){
             socket.get('nick', function(err, nick) {
                 //delete this user from contact list
                 delete contacts[socket.id];
-                console.log(nick+" left");
                 refreshContactList();
             });
         });
@@ -109,7 +103,3 @@ var createChat = function(room_name){
 
 createChat();
   
-//Debug memory usage every 10s
-setInterval(function(){
-    console.log("Memory",util.inspect(process.memoryUsage()));
-}, 10*1000);
