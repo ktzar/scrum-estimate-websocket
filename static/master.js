@@ -52,6 +52,7 @@ function updateList(contacts) {
         average = "No votes";
     }
     $('#value').html(average);
+    document.title = average;
 }
 
 function init() {
