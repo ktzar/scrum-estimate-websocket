@@ -36,6 +36,7 @@ function updateList(contacts) {
     var total = 0;
     var sum = 0;
     var average = 0;
+    var deviation = 0;
     $('#list').html('');
     for (_c in contacts) {
         contact = contacts[_c];
@@ -45,13 +46,21 @@ function updateList(contacts) {
             $('#list').html($('#list').html() + "<li>"+contact.name+": "+contact.points+"</li>");
         }
     }
-
     if (total > 0) {
         average = parseInt(100*sum/total)/100;
+        //Calculate standard deviation
+        for (_c in contacts) {
+            contact = contacts[_c];
+            if (contact.points > 0) {
+                deviation += Math.pow(contact.points-average,2);
+            }
+        }
+        deviation = Math.sqrt(deviation/total);
+        $('#value').html(average+"("+deviation+")");
     }else{
         average = "No votes";
+        $('#value').html(average);
     }
-    $('#value').html(average);
 }
 
 function init() {
