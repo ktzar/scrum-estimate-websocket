@@ -1,6 +1,16 @@
 //Constants
 var SERVER_PORT = 1080;
 
+//Check parameters for port
+if ( typeof process.argv[2] != "undefined") {
+    if ( parseInt(process.argv[2]) > 0) {
+        SERVER_PORT = parseInt(process.argv[2]);
+    }else{
+        console.log('Usage: node server.js [port_number]');
+        process.exit();
+    }
+}
+
 var app = require('http').createServer(handler)
 , io = require('socket.io').listen(app)
 , fs = require('fs')

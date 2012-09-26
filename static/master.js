@@ -56,10 +56,12 @@ function updateList(contacts) {
             }
         }
         deviation = Math.sqrt(deviation/total);
-        $('#value').html(average+"("+deviation+")");
+        $('#value').html(average+"<span class='deviation'>(σ="+deviation+")</span>");
+        document.title = average+"(σ="+deviation+")";
     }else{
         average = "No votes";
         $('#value').html(average);
+        document.title = average;
     }
 }
 
