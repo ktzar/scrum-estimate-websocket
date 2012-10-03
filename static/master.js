@@ -55,9 +55,9 @@ function updateList(contacts) {
                 deviation += Math.pow(contact.points-average,2);
             }
         }
-        deviation = Math.sqrt(deviation/total);
-        $('#value').html(average+"<span class='deviation'>(σ="+deviation+")</span>");
-        document.title = average+"(σ="+deviation+")";
+        deviation = parseInt(100*Math.sqrt(deviation/total))/100;
+        $('#value').html(average+"<span class='deviation'>(σ="+deviation+")</span><br/><span class='people'>"+total+" estimators</span>");
+        document.title = average+"(σ="+deviation+") ♞="+total;
     }else{
         average = "No votes";
         $('#value').html(average);
