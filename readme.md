@@ -1,5 +1,8 @@
 ## Estimation website with interfaces for estimators and scrum-master
 
+To install all the dependencies, run:
+
+`$ npm install`
 
 To run the server execute 
 
