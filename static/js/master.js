@@ -105,6 +105,15 @@ $(function(){
         var id = $(this).closest('li').attr('data-id');
         estimate.kickoutUser(id);
     });
+    var epic = $('#epic')[0];
+    $('.btn-epic').on('click', function() {
+        epic.currentTime = 0;
+        if (epic.paused) {
+            epic.play();
+        }else{
+            epic.pause();
+        }
+    });
     init();
 
 });
