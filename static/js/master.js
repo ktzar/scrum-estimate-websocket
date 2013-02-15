@@ -35,6 +35,23 @@ var Estimate = function(user_options) {
 
 var estimate;
 
+/**
+ * @param Array
+ */
+function calculateDeviation(estimations){
+    var deviation = 0;
+    var sum = 0;
+    for (estimation in estimations) {
+        sum += estimation;
+    }
+    var average = sum / estimations.length;
+    for (estimation in estimations) {
+        deviation += Math.pow(estimation-average,2);
+    }
+    deviation = parseInt(100*Math.sqrt(deviation/estimations.length))/100;
+    return deviation;
+};
+
 function updateList(contacts) {
     console.log(contacts);
     var contact;
@@ -52,16 +69,17 @@ function updateList(contacts) {
         }
     }
     if (total > 0) {
+        var estimations = [];
         average = parseInt(100*sum/total)/100;
         //Calculate standard deviation
         for (_c in contacts) {
             contact = contacts[_c];
             if (contact.points > 0) {
-                deviation += Math.pow(contact.points-average,2);
+                estimations.push(contact.points);
             }
         }
-        deviation = parseInt(100*Math.sqrt(deviation/total))/100;
-        $('#value').html(average+"<span class='deviation'>(σ="+deviation+")</span><br/><span class='people'>"+total+" estimators</span>");
+        deviation = calculateDeviation(estimations);
+        $('#value').html(average+"<br/><span class='deviation'>σ="+deviation+"</span><br/><span class='people'>"+total+" estimators</span>");
         document.title = average+"(σ="+deviation+") ♞="+total;
     }else{
         average = "No votes";

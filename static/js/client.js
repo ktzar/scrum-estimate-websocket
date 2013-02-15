@@ -44,7 +44,7 @@ var Estimate = function(user_options) {
      */
     this.nick       = null;     //The current nick
     this.options    = { };      //default options
-    var callbacks   = ['list']; //Callback functions to be integrated in the options
+    var callbacks   = ['list', 'disconnect', 'nickchange']; //Callback functions to be integrated in the options
 
     //check for HTML5 Storage
     this.hasLocalStorage = function supports_html5_storage() {
@@ -58,6 +58,7 @@ var Estimate = function(user_options) {
     /*
      ******* Initialise *********
      */
+    //create empty callback functions so we don't have errors when they're called but haven't been specified in the options
     for (var i in callbacks) {
         this.options['_cb_'+callbacks[i]] = function(){};
     }
@@ -72,6 +73,7 @@ var Estimate = function(user_options) {
     this.socket.on('connect', function(){});
     this.socket.on('disconnect', function(){
         console.log("Connection closed");
+        that.options['_cb_disconnect']();
     });
 
 
@@ -117,6 +119,7 @@ function init() {
     estimate = new Estimate({
         _cb_nickchange: nickChange,
         _cb_list: function(data){console.log('list', data);},
+        _cb_disconnect: function(){$('#wrapper').html("<div class='jumbo'>You've been kicked out</div>");},
     });
 }
 function changeName() {
