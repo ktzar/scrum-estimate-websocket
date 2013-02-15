@@ -9,7 +9,7 @@ function setCookie(c_name,value,exdays) {
 function getCookie(c_name) {
     var i,x,y,ARRcookies=document.cookie.split(";");
     for (i=0;i<ARRcookies.length;i++) {
-        x =A RRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+        x = ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
         y = ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
         x = x.replace(/^\s+|\s+$/g,"");
         if (x == c_name) { return unescape(y); }
@@ -102,7 +102,6 @@ var name;
 function nickChange (nick) {
     console.log('nickChange ',nick);
     $('.currentName').text(nick);
-    estimate.setNick(nick);
 }
 
 //Send the points
@@ -116,14 +115,16 @@ function init() {
     //instantiate conn class
     estimate = new Estimate({
         _cb_nickchange: nickChange,
-             _cb_list: function(data){console.log('list', data);},
+        _cb_list: function(data){console.log('list', data);},
     });
 }
 function changeName() {
-        name = prompt("Can I have your name please?");
-        setCookie('estimate_name', name, 365);
+    name = prompt("Can I have your name please?");
+    setCookie('estimate_name', name, 365);
+    estimate.setNick(name);
+    return name;
 }
-//onLoad
+
 $(function(){
     //ask for a name
     init();
@@ -132,8 +133,6 @@ $(function(){
     if (name == null) {
         changeName();
     }
-    nickChange(name);
-
 
     $('#values li').click(function(){
         $('#values li').removeClass('selected');
@@ -141,5 +140,8 @@ $(function(){
         $(this).addClass('selected');
     });
 
+    $('li.change_name').on('click', function() {
+        changeName();
+    });
 
 });
