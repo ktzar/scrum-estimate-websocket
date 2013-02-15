@@ -45,12 +45,27 @@ function calculateDeviation(estimations){
         sum += parseFloat(estimations[i]);
     }
     var average = sum / estimations.length;
-    for (estimation in estimations) {
-        deviation += Math.pow(estimation-average,2);
+    for (var i in estimations) {
+        deviation += Math.pow(estimations[i]-average,2);
     }
     deviation = parseInt(100*Math.sqrt(deviation/estimations.length))/100;
     return deviation;
 };
+
+var target = 0;
+var current = 0;
+
+var animation = function(){
+    if (parseFloat(Math.abs(target-current))<0.1) {
+        current = target;
+        clearInterval(animationInterval);
+    }else{
+        var direction = parseInt((target-current) / Math.abs(target-current));
+        current += direction*0.1;
+    }
+    $('.average').text(current.toFixed(2));
+};
+var animationInterval;
 
 function updateList(contacts) {
     console.log(contacts);
@@ -71,16 +86,18 @@ function updateList(contacts) {
         }
     }
     if (total > 0) {
-        average = (sum/total).toFixed(2);
+        average = parseFloat(sum/total);
+        target = average;
         //Calculate standard deviation
         deviation = calculateDeviation(estimations);
-        $('#value').html("<div class='average'>"+average+"</div><div class='deviation'>σ="+deviation+"</div><div class='people'>"+total+" estimators</div>");
+        $('#value').html("<div class='average'>"+current+"</div><div class='deviation'>σ="+deviation+"</div><div class='people'>"+total+" estimators</div>");
         document.title = average+"(σ="+deviation+") ♞="+total;
     }else{
         average = "No votes";
         $('#value').html(average);
         document.title = average;
     }
+    animationInterval = setInterval(animation, 10);
 }
 
 function init() {
