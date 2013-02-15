@@ -41,8 +41,8 @@ var estimate;
 function calculateDeviation(estimations){
     var deviation = 0;
     var sum = 0;
-    for (estimation in estimations) {
-        sum += estimation;
+    for (var i in estimations) {
+        sum += parseFloat(estimations[i]);
     }
     var average = sum / estimations.length;
     for (estimation in estimations) {
@@ -59,25 +59,20 @@ function updateList(contacts) {
     var sum = 0;
     var average = 0;
     var deviation = 0;
+    var estimations = [];
     $('#list').html('');
     for (_c in contacts) {
         contact = contacts[_c];
         if (contact.points > 0) {
+            estimations.push(contact.points);
             sum += contact.points;
             total ++;
             $('#list').html($('#list').html() + "<li data-id='"+_c+"'><i class='remove icon-remove-sign'></i>&nbsp;"+contact.name+": "+contact.points+"</li>");
         }
     }
     if (total > 0) {
-        var estimations = [];
-        average = parseInt(100*sum/total)/100;
+        average = (sum/total).toFixed(2);
         //Calculate standard deviation
-        for (_c in contacts) {
-            contact = contacts[_c];
-            if (contact.points > 0) {
-                estimations.push(contact.points);
-            }
-        }
         deviation = calculateDeviation(estimations);
         $('#value').html("<div class='average'>"+average+"</div><div class='deviation'>σ="+deviation+"</div><div class='people'>"+total+" estimators</div>");
         document.title = average+"(σ="+deviation+") ♞="+total;
@@ -109,7 +104,6 @@ $(function(){
     $('.btn-epic').on('click', function() {
         epic.currentTime = 0;
         if (epic.paused) {
-            epic.play();
         }else{
             epic.pause();
         }
