@@ -1,7 +1,7 @@
 {
      "name": "scrum_estimate_websocket",
      "description": "Estimate using websockets",
-     "version": "0.0.1",
+     "version": "0.0.2",
      "private": true,
      "dependencies": {
        "socket.io": "0.9"

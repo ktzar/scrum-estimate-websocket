@@ -96,7 +96,8 @@ var createEstimation = function(){
                 return;
             }
             console.log('contacts', contacts);
-            io.sockets[data.id].disconnect();
+            io.sockets.sockets[data.id].disconnect();
+            refreshContactList();
         });
 
         //Message to the Room
