@@ -1,5 +1,4 @@
-function setCookie(c_name,value,exdays)
-{
+function setCookie(c_name,value,exdays) {
     var exdate=new Date();
     exdate.setDate(exdate.getDate() + exdays);
     var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
@@ -7,8 +6,7 @@ function setCookie(c_name,value,exdays)
 }
 
 
-function getCookie(c_name)
-{
+function getCookie(c_name) {
     var i,x,y,ARRcookies=document.cookie.split(";");
     for (i=0;i<ARRcookies.length;i++)
     {
@@ -26,7 +24,6 @@ function getCookie(c_name)
 var Estimate = function(user_options) {
 
     var that = this;
-
 
     //The current nick
     this.nick = null;
@@ -94,10 +91,12 @@ var Estimate = function(user_options) {
     });
 }
 
-
+var estimate;
+var name;
 
 function nickChange (nick) {
     console.log('nickChange ',nick);
+    $('.currentName').text(nick);
     estimate.setNick(nick);
 }
 
@@ -107,7 +106,6 @@ function sendPoints (points) {
     estimate.sendPoints(points);
 }
 
-var estimate;
 
 function init() {
     //instantiate conn class
@@ -116,6 +114,10 @@ function init() {
              _cb_list: function(data){console.log('list', data);},
     });
 }
+function changeName() {
+        name = prompt("Can I have your name please?");
+        setCookie('estimate_name', name, 365);
+}
 //onLoad
 $(function(){
     //ask for a name
@@ -123,8 +125,7 @@ $(function(){
 
     var name = getCookie('estimate_name');
     if (name == null) {
-        name = prompt("Can I have your name please?");
-        setCookie('estimate_name', name, 365);
+        changeName();
     }
     nickChange(name);
 

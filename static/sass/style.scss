@@ -103,3 +103,22 @@ h1,h2{
         box-shadow:  1px 1px 0px $lightBlue;
     }
 }
+
+.menu {
+    height: 70px;
+    background: #cef;
+    li {
+        float: left;
+        width: 100px;
+        height: 100%;
+        border-left: 1px solid #49c;
+        border-right: 1px solid #49c;
+        padding: 5px;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    a {
+        color: black;
+    }
+}

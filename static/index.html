@@ -10,10 +10,17 @@
 <script src="/socket.io/socket.io.js"></script>
 <script src="js/client.js"></script>
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"></link>
+<link rel="stylesheet" href="css/font-awesome.min.css" type="text/css" media="screen" charset="utf-8"></link>
 </head>
 <body>
+    <header>
+        <h1 id="heading">Scrum Websockets Estimate <span class="pull-right currentName"></span></h1>
+        <ul class="menu">
+            <li class="change_name"><i class="icon-3x icon-user-md"></i><br/>Change name</li>
+            <a href="/master"><li><i class="icon-3x icon-legal"></i><br/>Scrum Master</li></a>
+        </ul>
+    </header>
     <div id="wrapper">
-        <h1 id="heading">Scrum Estimate (<a href="/master">Scrum master</a>)</h1>
         <div id="values">
             <ul>
                 <li>0</li>
@@ -25,15 +32,20 @@
                 <li>4</li>
                 <li>5</li>
                 <li>6</li>
+                <li>7</li>
                 <li>8</li>
+                <li>9</li>
                 <li>10</li>
+                <li>11</li>
+                <li>12</li>
                 <li>14</li>
+                <li>16</li>
                 <li>18</li>
             </ul>
         </div>
         <div class="controls">
-            <a class="button" href='#' onclick='slider.prev();return false;'>less</a> 
-            <a class="button" href='#' onclick='slider.next();return false;'>more</a>
+            <a class="button previous" >less</a> 
+            <a class="button next" >more</a>
         </div>
     </div>
     <script src='js/swipe.min.js'></script>
@@ -43,6 +55,8 @@
                 sendPoints($(elem).text());
             }
         });
+        $('.previous').on('click', function(){slider.prev();});
+        $('.next').on('click', function(){slider.next();});
     </script>
 </body>
 </html>

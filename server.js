@@ -71,7 +71,6 @@ var createChat = function(room_name){
             io.sockets.emit('list', contacts);
         };
 
-
         //If the client doesn't set any nickname it'll remain Anonymous
         var _this = this;
 
