@@ -79,7 +79,7 @@ function updateList(contacts) {
             }
         }
         deviation = calculateDeviation(estimations);
-        $('#value').html(average+"<br/><span class='deviation'>σ="+deviation+"</span><br/><span class='people'>"+total+" estimators</span>");
+        $('#value').html("<div class='average'>"+average+"</div><div class='deviation'>σ="+deviation+"</div><div class='people'>"+total+" estimators</div>");
         document.title = average+"(σ="+deviation+") ♞="+total;
     }else{
         average = "No votes";
