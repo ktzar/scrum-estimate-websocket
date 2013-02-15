@@ -107,6 +107,7 @@ h1,h2{
 .menu {
     height: 70px;
     background: #cef;
+    box-shadow: 0px 2px 4px rgba(0,0,0,0.5);
     li {
         float: left;
         width: 100px;
@@ -119,7 +120,12 @@ h1,h2{
         cursor: pointer;
     }
 
+    li [class^="icon-"] {
+        height: 1.25em;
+    }
+
     a {
         color: black;
+        text-decoration: none;
     }
 }

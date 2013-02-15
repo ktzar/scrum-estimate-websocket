@@ -93,6 +93,7 @@ var Estimate = function(user_options) {
     //Store the current nick
     this.socket.on('nick', function (new_nick) {
         that.nick = new_nick;
+        that.options['_cb_nickchange'](new_nick);
     });
 }
 
