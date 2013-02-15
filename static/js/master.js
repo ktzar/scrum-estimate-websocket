@@ -1,3 +1,11 @@
+//Variables
+var estimate; // the Estimate instance
+var deviationMethod = "standard";//will be changed in a modal popup
+var animationInterval;
+var target = 0; //for animation
+var current = 0; //for animation
+var contactsCache;
+
 //Chat Class
 var Estimate = function(user_options) {
 
@@ -33,7 +41,6 @@ var Estimate = function(user_options) {
 }
 
 
-var estimate;
 
 /**
  * @param Array
@@ -49,11 +56,11 @@ function calculateDeviation(estimations){
         deviation += Math.pow(estimations[i]-average,2);
     }
     deviation = parseInt(100*Math.sqrt(deviation/estimations.length))/100;
+    if (deviationMethod == "percentage") {
+        deviation = parseInt(100*(deviation/average))+"%";
+    }
     return deviation;
 };
-
-var target = 0;
-var current = 0;
 
 var animation = function(){
     if (parseFloat(Math.abs(target-current))<0.1) {
@@ -65,10 +72,9 @@ var animation = function(){
     }
     $('.average').text(current.toFixed(2));
 };
-var animationInterval;
 
 function updateList(contacts) {
-    console.log(contacts);
+    contactsCache = contacts; //store the latest copy
     var contact;
     var total = 0;
     var sum = 0;
@@ -119,11 +125,22 @@ $(function(){
     });
     var epic = $('#epic')[0];
     $('.btn-epic').on('click', function() {
-        epic.currentTime = 0;
         if (epic.paused) {
+            epic.play();
         }else{
             epic.pause();
         }
+    });
+    $('.btn-deviation').on('click', function() {
+        $('#deviation_picker').toggleClass('hidden');
+    });
+    $('.modal').on('click', '.close', function() {
+        $(this).closest('.modal').addClass('hidden');
+    });
+    $('.deviations li').css('cursor', 'pointer').on('click', function() {
+        deviationMethod = $(this).data('deviation');
+        $(this).closest('.modal').addClass('hidden');
+        updateList(contactsCache);
     });
     init();
 

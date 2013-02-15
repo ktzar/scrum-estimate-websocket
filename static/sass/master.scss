@@ -81,3 +81,45 @@ h1,h2{
     }
 }
 
+
+.modal {
+    position: fixed;
+    top: 100px;
+    left: 10%;
+    width: 80%;
+    background: white;
+    display: block;
+    margin: 0px auto;
+    box-shadow: 0px 4px 30px rgba(0,0,0,0.5);
+
+    h2 {
+        text-align: center;
+
+        .close{
+            float:right;
+            cursor:pointer;
+            margin-right: 5px;
+        }
+    }
+    section {
+        padding:0.5em;
+    }
+    ul {
+        list-style: none;
+    }
+
+    &.hidden {
+        display: none;
+    }
+}
+
+.deviations li {
+    text-align: center;
+    font-size: 18px;
+    margin: 0.5em 0;
+    background: #ccc;
+    border-top: 2px solid #eee;
+    border-left: 2px solid #eee;
+    border-right: 2px solid #eee;
+    border-bottom: 2px solid #999;
+}
