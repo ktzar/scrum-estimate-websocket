@@ -1,9 +1,12 @@
-@import url("font-awesome.css");
+@import url("font-awesome.min.css");
+@import "reset";
+@import "menu";
+
 body{
     font-family: Arial, sans;
-    background: #7B7F63;
     color: #black;
     margin: 0px;
+    background: white;
 }
 h1,h2{
     background: #11A883;
@@ -12,12 +15,6 @@ h1,h2{
     margin:0px;
 }
 #wrapper{
-    background: white;
-    width:100%;
-    height:100%;
-    margin:0px auto;
-    padding:0em;
-    box-shadow:0px 0px 20px #000;
     font-size:250px;
 }
 
@@ -57,6 +54,11 @@ h1,h2{
         padding-left:   1em;
         border-bottom:  1px solid #666;
         box-shadow:     inset 0px -1px 6px rgba(0, 0, 0, 0.5);
+
+        .icon-remove-sign {
+            color: #900;
+            cursor:pointer;
+        }
     }
 }
 
@@ -66,11 +68,10 @@ h1,h2{
     text-align: center;
     text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
     position: absolute;
-    top: 0px;
+    top: 100px;
     left: 0px;
     width: 100%;
     height: 100%;
-    background: white;
     .deviation {
         color: #666;
         font-size:150px;

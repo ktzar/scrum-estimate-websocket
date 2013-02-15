@@ -1,24 +1,13 @@
 @import "compass";
 @import "compass/reset";
+@import "menu";
+@import "reset";
+@import url("font-awesome.min.css");
 
 $lightBlue : #cae3fc;
 $deg_start : #4197ee;
 $deg_end :  #79bbff;
 
-
-html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, del, dfn, em, img, ins, kbd, q, samp, small, strong, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, table, tbody, tfoot, thead, tr, th, td, article, aside, footer, header, nav, section {
-    margin:0;
-    padding:0;
-    border:0;
-    outline:0;
-    font-size:100%;
-    vertical-align:baseline;
-    background:transparent;
-}
-body {
-    -webkit-text-size-adjust:none;
-    font-family:sans-serif;
-}
 
 small {
     margin:0 10px 30px;
@@ -40,8 +29,8 @@ small {
 
 
 body{
+    background: white;
     font-family:    Arial, sans;
-    background:     #7B7F63;
     color:          #black;
 }
 h1,h2{
@@ -54,7 +43,6 @@ h1,h2{
     }
 }
 #wrapper{
-    background: white;
     height:     100%;
     position:   absolute;
     width:      100%;
@@ -101,31 +89,5 @@ h1,h2{
         position:   relative;
         top:        5px;
         box-shadow:  1px 1px 0px $lightBlue;
-    }
-}
-
-.menu {
-    height: 70px;
-    background: #cef;
-    box-shadow: 0px 2px 4px rgba(0,0,0,0.5);
-    li {
-        float: left;
-        width: 100px;
-        height: 100%;
-        border-left: 1px solid #49c;
-        border-right: 1px solid #49c;
-        padding: 5px;
-        font-size: 12px;
-        text-align: center;
-        cursor: pointer;
-    }
-
-    li [class^="icon-"] {
-        height: 1.25em;
-    }
-
-    a {
-        color: black;
-        text-decoration: none;
     }
 }

@@ -90,6 +90,16 @@ var createEstimation = function(){
         });
 
         //Message to the Room
+        socket.on('kickout', function (data) {
+            console.log("Kickout", data.id);
+            if (data.id == undefined || isNaN(data.id)) {
+                return;
+            }
+            console.log('contacts', contacts);
+            io.sockets[data.id].disconnect();
+        });
+
+        //Message to the Room
         socket.on('points', function (message) {
             if (message == undefined || message.length == 0 ) {
                 return;

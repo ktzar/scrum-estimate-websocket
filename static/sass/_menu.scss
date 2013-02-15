@@ -1,0 +1,27 @@
+
+
+.menu {
+    height: 70px;
+    background: #cef;
+    box-shadow: 0px 2px 4px rgba(0,0,0,0.5);
+    li {
+        float: left;
+        width: 100px;
+        border-left: 1px solid #49c;
+        border-right: 1px solid #49c;
+        padding: 7px;
+        font-size: 12px;
+        text-align: center;
+        cursor: pointer;
+        list-style:     none;
+    }
+
+    li [class^="icon-"] {
+        height: 1.25em;
+    }
+
+    a {
+        color: black;
+        text-decoration: none;
+    }
+}

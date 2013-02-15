@@ -15,6 +15,11 @@ var Estimate = function(user_options) {
         this.options[attrname] = user_options[attrname]; 
     }
 
+    this.kickoutUser = function(id) {
+        console.log('kicking out', id);
+        that.socket.emit('kickout', {'id':""+id});
+    };
+
     this.socket = io.connect('/');
     this.socket.on('connect', function(){});
     this.socket.on('disconnect', function(){
@@ -43,7 +48,7 @@ function updateList(contacts) {
         if (contact.points > 0) {
             sum += contact.points;
             total ++;
-            $('#list').html($('#list').html() + "<li>"+contact.name+": "+contact.points+"</li>");
+            $('#list').html($('#list').html() + "<li data-id='"+_c+"'><i class='remove icon-remove-sign'></i>&nbsp;"+contact.name+": "+contact.points+"</li>");
         }
     }
     if (total > 0) {
@@ -77,6 +82,11 @@ $(function(){
         $('#list').slideToggle();
     });
     $('#list').hide();
+
+    $('#list').on('click', '.remove', function() {
+        var id = $(this).closest('li').attr('data-id');
+        estimate.kickoutUser(id);
+    });
     init();
 
 });
