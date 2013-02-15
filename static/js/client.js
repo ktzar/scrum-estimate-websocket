@@ -8,15 +8,11 @@ function setCookie(c_name,value,exdays) {
 
 function getCookie(c_name) {
     var i,x,y,ARRcookies=document.cookie.split(";");
-    for (i=0;i<ARRcookies.length;i++)
-    {
-        x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
-        y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
-        x=x.replace(/^\s+|\s+$/g,"");
-        if (x==c_name)
-        {
-            return unescape(y);
-        }
+    for (i=0;i<ARRcookies.length;i++) {
+        x =A RRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+        y = ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+        x = x.replace(/^\s+|\s+$/g,"");
+        if (x == c_name) { return unescape(y); }
     }
 }
 
@@ -25,37 +21,10 @@ var Estimate = function(user_options) {
 
     var that = this;
 
-    //The current nick
-    this.nick = null;
-
-    //check for HTML5 Storage
-    this.hasLocalStorage = function supports_html5_storage() {
-        try {
-            return 'localStorage' in window && window['localStorage'] !== null;
-        } catch (e) {
-            return false;
-        }
-    }();
-
-    //default options
-    this.options = { };
-
-    var callbacks = ['list'];
-    for (var i in callbacks) {
-        this.options['_cb_'+callbacks[i]] = function(){};
-    }
-
-    //merge options
-    for (var attrname in user_options) { 
-        this.options[attrname] = user_options[attrname]; 
-    }
-
-    this.socket = io.connect('/');
-    this.socket.on('connect', function(){});
-    this.socket.on('disconnect', function(){
-        console.log("Connection closed");
-    });
-
+    /*
+     ******* Functions *********
+     */
+    
     //message sending function
     this.sendPoints = function(points) {
         that.socket.emit('points', points); 
@@ -69,6 +38,42 @@ var Estimate = function(user_options) {
             localStorage.setItem("nick", nick);
         }
     };
+
+    /*
+     ******* Attributes and variables *********
+     */
+    this.nick       = null;     //The current nick
+    this.options    = { };      //default options
+    var callbacks   = ['list']; //Callback functions to be integrated in the options
+
+    //check for HTML5 Storage
+    this.hasLocalStorage = function supports_html5_storage() {
+        try {
+            return 'localStorage' in window && window['localStorage'] !== null;
+        } catch (e) {
+            return false;
+        }
+    }();
+
+    /*
+     ******* Initialise *********
+     */
+    for (var i in callbacks) {
+        this.options['_cb_'+callbacks[i]] = function(){};
+    }
+
+    //merge options
+    for (var attrname in user_options) { 
+        this.options[attrname] = user_options[attrname]; 
+    }
+
+    //create socket
+    this.socket = io.connect('/');
+    this.socket.on('connect', function(){});
+    this.socket.on('disconnect', function(){
+        console.log("Connection closed");
+    });
+
 
     //Set the stored nick if it's been stored
     if (this.hasLocalStorage) {
