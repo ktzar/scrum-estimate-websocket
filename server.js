@@ -60,7 +60,7 @@ function handler (req, res) {
 
 
 //TODO put this in a module
-var createChat = function(room_name){
+var createEstimation = function(){
 
     var contacts = {};
     var user_count = 0;
@@ -85,6 +85,7 @@ var createChat = function(room_name){
                 return;
             }
             contacts[socket.id]['name'] = message;
+            socket.emit('nick', message);
             refreshContactList();
         });
 
@@ -110,5 +111,5 @@ var createChat = function(room_name){
     });
 };
 
-createChat();
+createEstimation();
   
