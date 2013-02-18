@@ -1,50 +1,84 @@
-function setCookie(c_name,value,exdays) {
-    var exdate=new Date();
-    exdate.setDate(exdate.getDate() + exdays);
-    var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
-    document.cookie=c_name + "=" + c_value;
-}
-
-
-function getCookie(c_name) {
-    var i,x,y,ARRcookies=document.cookie.split(";");
-    for (i=0;i<ARRcookies.length;i++) {
-        x = ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
-        y = ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
-        x = x.replace(/^\s+|\s+$/g,"");
-        if (x == c_name) { return unescape(y); }
-    }
-}
-
 //Chat Class
 var Estimate = function(user_options) {
-
-    var that = this;
-
-    /*
-     ******* Functions *********
-     */
-    
-    //message sending function
-    this.sendPoints = function(points) {
-        that.socket.emit('points', points); 
-    };
-
-    //change nick 
-    this.setNick = function(nick) {
-        this.socket.emit('nick', nick); 
-        if ( this.hasLocalStorage ) {
-            console.log('store nick: ', nick);
-            localStorage.setItem("nick", nick);
-        }
-    };
 
     /*
      ******* Attributes and variables *********
      */
+    var that        = this; //scope helper
+    var callbacks   = ['list', 'disconnect', 'nickchange', 'connect']; //Callback functions to be integrated in the options
     this.nick       = null;     //The current nick
     this.options    = { };      //default options
-    var callbacks   = ['list', 'disconnect', 'nickchange']; //Callback functions to be integrated in the options
+
+
+    /*
+     ******* Functions *********
+     */
+
+    this.connect = function() {
+        //create socket
+        that.socket = io.connect('/');
+        that.socket.on('connect', function(){
+            that.options['_cb_connect']();
+        });
+        that.socket.on('disconnect', function(){
+            console.log("Connection closed");
+            that.options['_cb_disconnect']();
+        });
+    };
+
+    // Initialise
+    this.init = function() {
+        //create empty callback functions so we don't have errors when they're called but haven't been specified in the options
+        for (var i in callbacks) {
+            that.options['_cb_'+callbacks[i]] = function(){};
+        }
+
+        //merge options
+        for (var attrname in user_options) { 
+            that.options[attrname] = user_options[attrname]; 
+        }
+
+        that.connect();
+
+        //Set the stored nick if it's been stored
+        if (that.hasLocalStorage) {
+            var nick = localStorage.getItem("nick");
+            console.log('retrieve nick: ', nick);
+            if ( nick ) {
+                that.setNick(nick);
+            }else{
+                nick = prompt("Can I have your name please?");
+                localStorage.setItem('nick', nick);
+                that.setNick(nick);
+            }
+        }
+
+        that.socket.on('list', function (msg) {
+            console.log('list', msg);
+            //call that.options.cb_list
+        });
+
+        //Internal callbacks process
+        //Store the current nick
+        that.socket.on('nick', function (new_nick) {
+            that.nick = new_nick;
+            that.options['_cb_nickchange'](new_nick);
+        });
+    }
+    
+    //message sending function
+    that.sendPoints = function(points) {
+        that.socket.emit('points', points); 
+    };
+
+    //change nick 
+    that.setNick = function(nick) {
+        that.socket.emit('nick', nick); 
+        if ( that.hasLocalStorage ) {
+            console.log('store nick: ', nick);
+            localStorage.setItem("nick", nick);
+        }
+    };
 
     //check for HTML5 Storage
     this.hasLocalStorage = function supports_html5_storage() {
@@ -55,48 +89,7 @@ var Estimate = function(user_options) {
         }
     }();
 
-    /*
-     ******* Initialise *********
-     */
-    //create empty callback functions so we don't have errors when they're called but haven't been specified in the options
-    for (var i in callbacks) {
-        this.options['_cb_'+callbacks[i]] = function(){};
-    }
-
-    //merge options
-    for (var attrname in user_options) { 
-        this.options[attrname] = user_options[attrname]; 
-    }
-
-    //create socket
-    this.socket = io.connect('/');
-    this.socket.on('connect', function(){});
-    this.socket.on('disconnect', function(){
-        console.log("Connection closed");
-        that.options['_cb_disconnect']();
-    });
-
-
-    //Set the stored nick if it's been stored
-    if (this.hasLocalStorage) {
-        var nick = localStorage.getItem("nick");
-        console.log('retrieve nick: ', nick);
-        if ( nick ) {
-            this.setNick(nick);
-        }
-    }
-
-    this.socket.on('list', function (msg) {
-        console.log('list', msg);
-        //call this.options.cb_list
-    });
-
-    //Internal callbacks process
-    //Store the current nick
-    this.socket.on('nick', function (new_nick) {
-        that.nick = new_nick;
-        that.options['_cb_nickchange'](new_nick);
-    });
+    this.init();
 }
 
 var estimate;
@@ -119,12 +112,19 @@ function init() {
     estimate = new Estimate({
         _cb_nickchange: nickChange,
         _cb_list: function(data){console.log('list', data);},
-        _cb_disconnect: function(){$('#wrapper').html("<div class='jumbo'>You've been kicked out</div>");},
+        _cb_disconnect: function(){
+            $('#wrapper').html("<div class='jumbo'>Connection lost<br/><span class='hint'>maybe other user connected with your name? Try changing names</span></div>");
+            $('.menu .connection').addClass('disconnected');
+            $('.menu .connection label').text('Disconnected');
+        },
+        _cb_connect: function(){
+            $('.menu .connection').removeClass('disconnected');
+            $('.menu .connection label').text('Connected');
+        },
     });
 }
 function changeName() {
     name = prompt("Can I have your name please?");
-    setCookie('estimate_name', name, 365);
     estimate.setNick(name);
     return name;
 }
@@ -132,11 +132,6 @@ function changeName() {
 $(function(){
     //ask for a name
     init();
-
-    var name = getCookie('estimate_name');
-    if (name == null) {
-        changeName();
-    }
 
     $('#values li').click(function(){
         $('#values li').removeClass('selected');
@@ -146,6 +141,10 @@ $(function(){
 
     $('li.change_name').on('click', function() {
         changeName();
+    });
+
+    $('.menu').on('click', '.connection.disconnected', function(){
+        estimate.init();
     });
 
 });
