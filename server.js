@@ -84,6 +84,13 @@ var createEstimation = function(){
             if (message == undefined || message.length == 0 ) {
                 return;
             }
+            //Check if there's other people connected with the same name and disconnect them
+            for (_contact in contacts) {
+                if (contacts[_contact]['name'] == message) {
+                    io.sockets.sockets[_contact].disconnect();
+                    break;
+                }
+            }
             contacts[socket.id]['name'] = message;
             socket.emit('nick', message);
             refreshContactList();
