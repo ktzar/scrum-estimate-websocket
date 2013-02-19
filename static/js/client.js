@@ -48,6 +48,7 @@ var Estimate = function(user_options) {
                 that.setNick(nick);
             }else{
                 nick = prompt("Can I have your name please?");
+                if (nick == "") return;
                 localStorage.setItem('nick', nick);
                 that.setNick(nick);
             }
