@@ -91,7 +91,7 @@ var createEstimation = function(){
                     break;
                 }
             }
-            contacts[socket.id]['name'] = message;
+            contacts[socket.id] && contacts[socket.id]['name'] = message;
             socket.emit('nick', message);
             refreshContactList();
         });
