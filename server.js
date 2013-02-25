@@ -91,7 +91,9 @@ var createEstimation = function(){
                     break;
                 }
             }
-            contacts[socket.id]['name'] = message;
+            if (typeof(contacts[socket.id]) != "undefined") {
+                contacts[socket.id]['name'] = message;
+            }
             socket.emit('nick', message);
             refreshContactList();
         });
