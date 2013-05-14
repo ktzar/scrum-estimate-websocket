@@ -3,8 +3,8 @@ var SERVER_PORT = 1080;
 
 //Check parameters for port
 if ( typeof process.argv[2] != "undefined") {
-    if ( parseInt(process.argv[2]) > 0) {
-        SERVER_PORT = parseInt(process.argv[2]);
+    if ( parseInt(process.argv[2],10) > 0) {
+        SERVER_PORT = parseInt(process.argv[2],10);
     }else{
         console.log('Usage: node server.js [port_number]');
         process.exit();
@@ -17,7 +17,7 @@ var app     = require('http').createServer(handler),
     util    = require('util'),
     mime    = require('./lib/mime');
 
-
+io.set('log level', 1);
 app.listen(SERVER_PORT);
 
 //HTTP handler
@@ -111,7 +111,7 @@ var createEstimation = function(){
 
         //Message to the Room
         socket.on('points', function (message) {
-            if (message === undefined || message.length === 0 ) {
+            if (typeof message == "undefined" || !message ) {
                 return;
             }
             contacts[socket.id].points = parseFloat(message);
