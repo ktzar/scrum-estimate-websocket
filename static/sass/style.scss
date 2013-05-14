@@ -4,9 +4,9 @@
 @import "reset";
 @import url("font-awesome.min.css");
 
-$lightBlue : #cae3fc;
-$deg_start : #4197ee;
-$deg_end :  #79bbff;
+$lightBlue: #cae3fc;
+$deg_start: #4197ee;
+$deg_end:   #79bbff;
 
 .jumbo {
     text-align: center;
@@ -42,7 +42,7 @@ small {
 body{
     background: white;
     font-family:    Arial, sans;
-    color:          #black;
+    color:          black;
 }
 h1,h2{
     background: #4197ee;
