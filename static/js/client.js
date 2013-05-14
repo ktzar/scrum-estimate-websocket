@@ -41,7 +41,7 @@ var Estimate = function(user_options) {
         that.connect();
 
         //Set the stored nick if it's been stored
-        if (that.hasLocalStorage) {
+        if (hasLocalStorage) {
             var nick = localStorage.getItem("nick");
             console.log('retrieve nick: ', nick);
             if ( nick ) {
@@ -69,29 +69,31 @@ var Estimate = function(user_options) {
     
     //message sending function
     that.sendPoints = function(points) {
+        hasLocalStorage && localStorage.setItem('points', points);
         that.socket.emit('points', points); 
     };
 
     //change nick 
     that.setNick = function(nick) {
         that.socket.emit('nick', nick); 
-        if ( that.hasLocalStorage ) {
+        if ( hasLocalStorage ) {
             console.log('store nick: ', nick);
             localStorage.setItem("nick", nick);
         }
     };
 
-    //check for HTML5 Storage
-    this.hasLocalStorage = function supports_html5_storage() {
-        try {
-            return 'localStorage' in window && window['localStorage'] !== null;
-        } catch (e) {
-            return false;
-        }
-    }();
 
     this.init();
 }
+
+//check for HTML5 Storage
+var hasLocalStorage = function supports_html5_storage() {
+    try {
+        return 'localStorage' in window && window['localStorage'] !== null;
+    } catch (e) {
+        return false;
+    }
+}();
 
 var estimate;
 var name;
@@ -114,18 +116,26 @@ function init() {
         _cb_nickchange: nickChange,
         _cb_list: function(data){console.log('list', data);},
         _cb_disconnect: function(){
-            $('#wrapper').html("<div class='jumbo'>Connection lost<br/><span class='hint'>maybe other user connected with your name? Try changing names</span></div>");
+            $('#wrapper').html("<div class='jumbo'>Connection lost, reconnecting in 1s.<br/><span class='hint'>Maybe other user connected with your name? Try changing names</span></div>");
             $('.menu .connection').addClass('disconnected');
             $('.menu .connection label').text('Disconnected');
+            setTimeout(function(){
+                location.reload();
+            },800);
         },
         _cb_connect: function(){
             $('.menu .connection').removeClass('disconnected');
             $('.menu .connection label').text('Connected');
-        },
+        }
     });
 }
 function changeName() {
     name = prompt("Can I have your name please?");
+    console.log(name);
+    if (!name || name == "null") {
+        console.log("return");
+        return;
+    }
     estimate.setNick(name);
     return name;
 }
@@ -133,19 +143,30 @@ function changeName() {
 $(function(){
     //ask for a name
     init();
-
+    //Handle click on the scores
     $('#values li').click(function(){
         $('#values li').removeClass('selected');
-        sendPoints(parseFloat($(this).text()));
+        var points = parseFloat($(this).text());
+        sendPoints(points);
         $(this).addClass('selected');
     });
-
+    //Handle click on changing name
     $('li.change_name').on('click', function() {
         changeName();
     });
-
+    //Handle click on clicking in disconnect: reload page
     $('.menu').on('click', '.connection.disconnected', function(){
-        estimate.init();
+        location.reload();
     });
+    //Load the last used score 
+    if ( hasLocalStorage ) {
+        var points = localStorage.getItem('points');
+        if (points) { //If there's a number stored, 
+            //find a slide with that number, get its position in its siblings set
+            var index = $('#values li:contains('+points+')').first().index();
+            //set the slider on that slide
+            slider.slide(index);
+        }
+    }
 
 });
