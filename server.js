@@ -11,11 +11,11 @@ if ( typeof process.argv[2] != "undefined") {
     }
 }
 
-var app = require('http').createServer(handler)
-, io = require('socket.io').listen(app)
-, fs = require('fs')
-, util = require('util')
-, mime = require('./lib/mime')
+var app     = require('http').createServer(handler),
+    io      = require('socket.io').listen(app),
+    fs      = require('fs'),
+    util    = require('util'),
+    mime    = require('./lib/mime');
 
 
 app.listen(SERVER_PORT);
@@ -24,13 +24,13 @@ app.listen(SERVER_PORT);
 function handler (req, res) {
 
     //Room list
-    if (req.url.indexOf("/master") == 0 ) {
+    if (req.url.indexOf("/master") === 0 ) {
         //Elsewhere, redirect to the static page
         res.writeHead(302, {
             'Location': '/static/master.html'
         });
         res.end();
-    }else if (req.url.indexOf("/static/")==0) {
+    }else if (req.url.indexOf("/static/")===0) {
     //Dump any existing file in the /static folder
         var file = req.url;
         //Read the desired file and output it
@@ -81,18 +81,18 @@ var createEstimation = function(){
 
         //Message to the Room
         socket.on('nick', function (message) {
-            if (message == undefined || message.length == 0 ) {
+            if (message === undefined || message.length === 0 ) {
                 return;
             }
             //Check if there's other people connected with the same name and disconnect them
-            for (_contact in contacts) {
-                if (contacts[_contact]['name'] == message) {
+            for (var _contact in contacts) {
+                if (contacts[_contact].name === message) {
                     io.sockets.sockets[_contact].disconnect();
                     break;
                 }
             }
             if (typeof(contacts[socket.id]) != "undefined") {
-                contacts[socket.id]['name'] = message;
+                contacts[socket.id].name = message;
             }
             socket.emit('nick', message);
             refreshContactList();
@@ -101,7 +101,7 @@ var createEstimation = function(){
         //Message to the Room
         socket.on('kickout', function (data) {
             console.log("Kickout", data.id);
-            if (data.id == undefined || isNaN(data.id)) {
+            if (data.id === undefined || isNaN(data.id)) {
                 return;
             }
             console.log('contacts', contacts);
@@ -111,12 +111,12 @@ var createEstimation = function(){
 
         //Message to the Room
         socket.on('points', function (message) {
-            if (message == undefined || message.length == 0 ) {
+            if (message === undefined || message.length === 0 ) {
                 return;
             }
-            contacts[socket.id]['points'] = parseFloat(message);
+            contacts[socket.id].points = parseFloat(message);
             //Get the nickname
-            var nick = contacts[socket.id]['nick'];
+            var nick = contacts[socket.id].nick;
             refreshContactList();
         });
 
