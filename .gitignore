@@ -2,3 +2,6 @@
 *.swo
 .sass-cache
 node_modules
+nohup.out
+server.js.pid
+
